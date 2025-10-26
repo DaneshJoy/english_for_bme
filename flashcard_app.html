@@ -5,201 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flashcard Study App</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
+            min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden;
         }
-
-        .container {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .card-wrapper {
-            perspective: 1000px;
-            width: 600px;
-            height: 400px;
-        }
-
-        .flashcard {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s;
-            cursor: pointer;
-        }
-
-        .flashcard.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .flashcard.continue-rotation {
-            transform: rotateY(360deg);
-        }
-
-        .card-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .card-front {
-            background: white;
-        }
-
-        .card-back {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            transform: rotateY(180deg);
-            color: white;
-        }
-
-        .word {
-            font-size: 48px;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .form {
-            font-size: 18px;
-            color: #999;
-            font-style: italic;
-        }
-
-        .definition {
-            font-size: 28px;
-            text-align: center;
-            line-height: 1.6;
-        }
-
-        .progress {
-            position: absolute;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 18px;
-            color: white;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px 20px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-        }
-
+        .container { position: relative; width: 100%; height: 100vh; display: flex; justify-content: center; align-items: center; }
+        .card-wrapper { perspective: 1000px; width: 600px; height: 400px; }
+        .flashcard { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s; cursor: pointer; }
+        .flashcard.flipped { transform: rotateY(180deg); }
+        .flashcard.continue-rotation { transform: rotateY(360deg); }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); }
+        .card-front { background: white; }
+        .card-back { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); transform: rotateY(180deg); color: white; }
+        .word { font-size: 48px; font-weight: bold; color: #667eea; margin-bottom: 10px; text-align: center; }
+        .form { font-size: 18px; color: #999; font-style: italic; }
+        .definition { font-size: 28px; text-align: center; line-height: 1.6; }
+        .progress { position: absolute; top: 30px; left: 50%; transform: translateX(-50%); font-size: 18px; color: white; background: rgba(255, 255, 255, 0.2); padding: 10px 20px; border-radius: 20px; backdrop-filter: blur(10px); }
         .load-button {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: white;
-            color: #667eea;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            transition: transform 0.2s, box-shadow 0.2s;
+            position: fixed; bottom: 30px; right: 30px; background: white; color: #667eea; border: none;
+            padding: 15px 20px; border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); transition: transform 0.2s, box-shadow 0.2s;
         }
+        .load-button:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); }
+        .load-button:active { transform: translateY(0); }
+        input[type="file"] { display: none; }
+        .celebration { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; justify-content: center; align-items: center; flex-direction: column; z-index: 1000; }
+        .celebration.active { display: flex; }
+        .celebration-text { font-size: 64px; color: white; font-weight: bold; margin-bottom: 20px; }
+        .confetti { position: absolute; width: 10px; height: 10px; background: #f5576c; top: -10px; animation: confetti-fall 3s linear infinite; border-radius: 50%; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        @keyframes confetti-fall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+        .instruction { position: absolute; bottom: 100px; color: white; font-size: 16px; opacity: 0.8; }
+        .hidden { display: none !important; }
 
-        .load-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        /* NEW: second button styling (left of Load Markdown) */
+        .select-button {
+            position: fixed; bottom: 30px; right: 230px;
+            background: white; color: #764ba2; border: none; padding: 15px 30px;
+            border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: transform .2s, box-shadow .2s;
         }
+        .select-button:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
 
-        .load-button:active {
-            transform: translateY(0);
+        /* NEW: modal for unit selection */
+        .modal-backdrop {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+            display: none; align-items: center; justify-content: center; z-index: 1500;
         }
-
-        input[type="file"] {
-            display: none;
+        .modal-backdrop.active { display: flex; }
+        .modal {
+            width: min(90vw, 560px); max-height: 70vh; overflow: auto;
+            background: #fff; border-radius: 18px; padding: 20px 22px; box-shadow: 0 30px 80px rgba(0,0,0,0.35);
         }
-
-        .celebration {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            z-index: 1000;
+        .modal header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+        .modal h3 { font-size: 20px; color: #4c51bf; }
+        .modal button.close {
+            appearance: none; border: none; background: #eee; border-radius: 999px; width: 36px; height: 36px; font-size: 18px; cursor: pointer;
         }
-
-        .celebration.active {
-            display: flex;
+        .file-list a {
+            display: block; padding: 10px 12px; border-radius: 12px; text-decoration: none;
+            color: #333; background: #f7f7fb; margin: 6px 0; border: 1px solid #ececf5;
         }
-
-        .celebration-text {
-            font-size: 64px;
-            color: white;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #f5576c;
-            top: -10px;
-            animation: confetti-fall 3s linear infinite;
-            border-radius: 50%;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        @keyframes confetti-fall {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
-            }
-        }
-
-        .instruction {
-            position: absolute;
-            bottom: 100px;
-            color: white;
-            font-size: 16px;
-            opacity: 0.8;
-        }
-
-        .hidden {
-            display: none !important;
-        }
+        .file-list a:hover { background: #eef2ff; border-color: #c7d2fe; }
+        .muted { color: #666; font-size: 14px; margin: 8px 0; }
+        .error { color: #c53030; background: #fff5f5; border: 1px solid #fed7d7; padding: 10px 12px; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -228,12 +99,35 @@
         <div style="color: white; font-size: 24px;">You've completed all cards!</div>
     </div>
 
-    <label for="fileInput" class="load-button">
-        📁 Load Markdown
-    </label>
+    <!-- NEW: Select Unit button -->
+    <button class="select-button" id="selectUnitBtn">📚 Select Unit</button>
+
+    <!-- Existing: Load Markdown -->
+    <label for="fileInput" class="load-button">📁 Load Markdown</label>
     <input type="file" id="fileInput" accept=".md,.markdown">
 
+    <!-- NEW: Modal -->
+    <div class="modal-backdrop" id="unitModal">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="unitTitle">
+            <header>
+                <h3 id="unitTitle">Select a Unit (Markdown in <code>vocabs/</code>)</h3>
+                <button class="close" id="closeModal" title="Close">×</button>
+            </header>
+            <div id="unitStatus" class="muted">Loading…</div>
+            <div class="file-list" id="unitList"></div>
+        </div>
+    </div>
+
     <script>
+        // ====== YOUR GITHUB REPO INFO (EDIT THESE) ======
+        const GITHUB = {
+            owner: 'daneshjoy',
+            repo:  'english_for_bme',
+            branch:'main',              // e.g., 'main' or 'gh-pages'
+            path:  'vocabs'             // directory containing .md files
+        };
+        // ================================================
+
         let cards = [];
         let currentIndex = 0;
         let isFlipped = false;
@@ -249,14 +143,87 @@
         const celebration = document.getElementById('celebration');
         const instruction = document.getElementById('instruction');
 
+        // NEW: Modal elements
+        const selectUnitBtn = document.getElementById('selectUnitBtn');
+        const unitModal = document.getElementById('unitModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const unitList = document.getElementById('unitList');
+        const unitStatus = document.getElementById('unitStatus');
+
         fileInput.addEventListener('change', handleFileSelect);
         flashcard.addEventListener('click', handleCardClick);
         document.addEventListener('keydown', handleKeyPress);
 
+        // NEW: Open modal & load file list
+        selectUnitBtn.addEventListener('click', async () => {
+            unitList.innerHTML = '';
+            unitStatus.textContent = 'Loading…';
+            openModal();
+            try {
+                const files = await fetchGithubMarkdownList();
+                if (!files.length) {
+                    unitStatus.innerHTML = '<div class="muted">No markdown files found in <code>vocabs/</code>.</div>';
+                    return;
+                }
+                unitStatus.textContent = 'Pick a file:';
+                const frag = document.createDocumentFragment();
+                files.forEach(f => {
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.textContent = f.name;
+                    a.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        unitStatus.textContent = `Loading ${f.name}…`;
+                        try {
+                            const md = await fetchRawFile(f);
+                            parseMarkdown(md);
+                            closeModal();
+                        } catch (err) {
+                            unitStatus.innerHTML = `<div class="error">Failed to load file: ${escapeHtml(err.message || err)}</div>`;
+                        }
+                    });
+                    frag.appendChild(a);
+                });
+                unitList.appendChild(frag);
+            } catch (err) {
+                unitStatus.innerHTML = `<div class="error">Error: ${escapeHtml(err.message || err)}</div>`;
+            }
+        });
+
+        // NEW: Close modal
+        closeModalBtn.addEventListener('click', closeModal);
+        unitModal.addEventListener('click', (e) => { if (e.target === unitModal) closeModal(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && unitModal.classList.contains('active')) closeModal(); });
+
+        function openModal() { unitModal.classList.add('active'); }
+        function closeModal() { unitModal.classList.remove('active'); }
+
+        // --- GitHub helpers ---
+        async function fetchGithubMarkdownList() {
+            const { owner, repo, path, branch } = GITHUB;
+            const url = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`;
+            const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } });
+            if (!res.ok) throw new Error(`GitHub API ${res.status} ${res.statusText}`);
+            const data = await res.json(); // array of items
+            return (Array.isArray(data) ? data : [])
+                .filter(item => item.type === 'file' && /\.(md|markdown)$/i.test(item.name));
+        }
+
+        async function fetchRawFile(item) {
+            // Prefer provided download_url; fallback to raw URL
+            const url = item.download_url ||
+                        `https://raw.githubusercontent.com/${GITHUB.owner}/${GITHUB.repo}/${GITHUB.branch}/${item.path}`;
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`Fetch ${item.name} failed: ${res.status}`);
+            return await res.text();
+        }
+
+        function escapeHtml(s) { return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+        // --- Existing logic ---
         function handleFileSelect(e) {
             const file = e.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function(e) {
                 const content = e.target.result;
@@ -268,7 +235,6 @@
         function parseMarkdown(content) {
             const lines = content.split('\n');
             cards = [];
-
             for (let line of lines) {
                 line = line.trim();
                 if (line.startsWith('|') && !line.includes('---') && !line.includes('Word')) {
@@ -282,29 +248,24 @@
                     }
                 }
             }
-
             if (cards.length > 0) {
                 currentIndex = 0;
                 isFlipped = false;
                 cardWrapper.classList.remove('hidden');
                 instruction.classList.remove('hidden');
                 showCard();
+            } else {
+                progress.textContent = 'No cards found in file.';
             }
         }
 
         function showCard() {
-            if (currentIndex >= cards.length) {
-                showCelebration();
-                return;
-            }
-
+            if (currentIndex >= cards.length) { showCelebration(); return; }
             const card = cards[currentIndex];
             word.textContent = card.word;
             form.textContent = card.form;
             definition.textContent = card.definition;
             progress.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
-            
-            // Reset rotation classes but keep the rotation value
             flashcard.classList.remove('flipped', 'continue-rotation');
             flashcard.style.transform = `rotateY(${rotationDegrees}deg)`;
             isFlipped = false;
@@ -319,9 +280,7 @@
                 currentIndex++;
                 rotationDegrees += 180;
                 flashcard.style.transform = `rotateY(${rotationDegrees}deg)`;
-                setTimeout(() => {
-                    showCard();
-                }, 100);
+                setTimeout(() => { showCard(); }, 100);
             }
         }
 
@@ -337,13 +296,7 @@
             instruction.classList.add('hidden');
             celebration.classList.add('active');
             progress.textContent = 'Completed! 🎊';
-
-            // Create confetti
-            for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                    createConfetti();
-                }, i * 50);
-            }
+            for (let i = 0; i < 50; i++) setTimeout(createConfetti, i * 50);
         }
 
         function createConfetti() {
@@ -353,7 +306,6 @@
             confetti.style.background = ['#f5576c', '#f093fb', '#4facfe', '#00f2fe', '#ffd89b'][Math.floor(Math.random() * 5)];
             confetti.style.animationDelay = Math.random() * 1 + 's';
             celebration.appendChild(confetti);
-
             setTimeout(() => confetti.remove(), 3000);
         }
     </script>
