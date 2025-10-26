@@ -1,7 +1,7 @@
 # English for BioMedical Engineering (BME) Students
 
 ## Flashcard app:
-- <a href="https://daneshjoy.github.io/english_for_bme" target="_blank">https://daneshjoy.github.io/english_for_bme</a>
+- [https://daneshjoy.github.io/english_for_bme](https://daneshjoy.github.io/english_for_bme)
 
 ## Units:
 
