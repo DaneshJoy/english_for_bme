@@ -20,11 +20,12 @@
         .card-front { background: white; }
         .card-back { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); transform: rotateY(180deg); color: white; }
         .word { font-size: 48px; font-weight: bold; color: #667eea; margin-bottom: 10px; text-align: center; }
+        /* .word-back { font-size: 48px; font-weight: bold; color: #f8c4fc; margin-bottom: 10px; text-align: center; } */
         .form { font-size: 18px; color: #999; font-style: italic; }
         .definition { font-size: 28px; text-align: center; line-height: 1.6; }
         .progress { position: absolute; top: 30px; left: 50%; transform: translateX(-50%); font-size: 18px; color: white; background: rgba(255, 255, 255, 0.2); padding: 10px 20px; border-radius: 20px; backdrop-filter: blur(10px); }
         .load-button {
-            position: fixed; bottom: 30px; right: 30px; background: white; color: #667eea; border: none;
+            position: fixed; bottom: 30px; right: 30px; background: #7451ab; color: white; border: none;
             padding: 15px 20px; border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); transition: transform 0.2s, box-shadow 0.2s;
         }
@@ -43,7 +44,7 @@
         /* NEW: second button styling (left of Load Markdown) */
         .select-button {
             position: fixed; bottom: 30px; right: 230px;
-            background: white; color: #764ba2; border: none; padding: 15px 30px;
+            background: #7257b2; color: white; border: none; padding: 15px 30px;
             border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: transform .2s, box-shadow .2s;
         }
@@ -71,6 +72,25 @@
         .file-list a:hover { background: #eef2ff; border-color: #c7d2fe; }
         .muted { color: #666; font-size: 14px; margin: 8px 0; }
         .error { color: #c53030; background: #fff5f5; border: 1px solid #fed7d7; padding: 10px 12px; border-radius: 10px; }
+        /* Bottom-left Next/Previous button */
+        .next-button {
+            position: fixed; bottom: 30px; left: 90px;
+            width: 48px; height: 48px; border-radius: 50%;
+            border: none; background: #ffffff; color: #4c51bf;
+            font-size: 22px; line-height: 48px; text-align: center; cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform .2s, box-shadow .2s;
+        }
+        .prev-button{
+            position: fixed; bottom: 30px; left: 30px;
+            width: 48px; height: 48px; border-radius: 50%;
+            border: none; background: #ffffff; color: #4c51bf;
+            font-size: 22px; line-height: 48px; text-align: center; cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform .2s, box-shadow .2s;
+        }
+        .prev-button:hover, .next-button:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+        .prev-button:active, .next-button:active { transform: translateY(0); }
     </style>
 </head>
 <body>
@@ -84,13 +104,15 @@
                     <div class="form" id="form"></div>
                 </div>
                 <div class="card-face card-back">
+                    <!-- <div class="word-back" id="word-back"></div> -->
                     <div class="definition" id="definition"></div>
                 </div>
             </div>
         </div>
 
         <div class="instruction hidden" id="instruction">
-            Click card or press SPACEBAR
+            Click card or press SPACEBAR to proceed</br>
+            <span>Or use arrow keys (← →) for navigation</span>
         </div>
     </div>
 
@@ -99,6 +121,9 @@
         <div style="color: white; font-size: 24px;">You've completed all cards!</div>
     </div>
 
+    <!-- Next/Previous (bottom-left) -->
+    <button class="next-button" id="nextBtn" title="Next (→)" style="display: none;">→</button>
+    <button class="prev-button" id="prevBtn" title="Previous (←)" style="display: none;">←</button>
     <!-- NEW: Select Unit button -->
     <button class="select-button" id="selectUnitBtn">📚 Select Unit</button>
 
@@ -131,17 +156,22 @@
         let cards = [];
         let currentIndex = 0;
         let isFlipped = false;
+        let isFinished = false;
         let rotationDegrees = 0;
 
         const fileInput = document.getElementById('fileInput');
         const flashcard = document.getElementById('flashcard');
         const cardWrapper = document.getElementById('cardWrapper');
         const word = document.getElementById('word');
+        // const wordBack = document.getElementById('word-back');
         const form = document.getElementById('form');
         const definition = document.getElementById('definition');
         const progress = document.getElementById('progress');
         const celebration = document.getElementById('celebration');
         const instruction = document.getElementById('instruction');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+
 
         // NEW: Modal elements
         const selectUnitBtn = document.getElementById('selectUnitBtn');
@@ -153,6 +183,9 @@
         fileInput.addEventListener('change', handleFileSelect);
         flashcard.addEventListener('click', handleCardClick);
         document.addEventListener('keydown', handleKeyPress);
+        nextBtn.addEventListener('click', handleCardClick);
+        prevBtn.addEventListener('click', showPrev);
+
 
         // NEW: Open modal & load file list
         selectUnitBtn.addEventListener('click', async () => {
@@ -230,6 +263,8 @@
                 parseMarkdown(content);
             };
             reader.readAsText(file);
+            nextBtn.style.display = 'block';
+            prevBtn.style.display = 'block';
         }
 
         function parseMarkdown(content) {
@@ -260,10 +295,11 @@
         }
 
         function showCard() {
-            if (currentIndex >= cards.length) { showCelebration(); return; }
+            if (currentIndex >= cards.length) { showCelebration(); isFinished = true; return; }
             const card = cards[currentIndex];
             word.textContent = card.word;
             form.textContent = card.form;
+            // wordBack.textContent = card.word;
             definition.textContent = card.definition;
             progress.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
             flashcard.classList.remove('flipped', 'continue-rotation');
@@ -272,6 +308,7 @@
         }
 
         function handleCardClick() {
+            if (isFinished) return;
             if (!isFlipped) {
                 rotationDegrees += 180;
                 flashcard.style.transform = `rotateY(${rotationDegrees}deg)`;
@@ -284,14 +321,40 @@
             }
         }
 
+        function showPrev() {
+            if (cards.length === 0 || isFinished) return;
+
+            if (isFlipped) {
+                // If the back is showing, unflip to the front of the same card (reverse spin)
+                rotationDegrees -= 180;
+                flashcard.style.transform = `rotateY(${rotationDegrees}deg)`;
+                isFlipped = false;
+            } else {
+                // Go to the previous card (if any) and spin in reverse
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    rotationDegrees -= 180;
+                    flashcard.style.transform = `rotateY(${rotationDegrees}deg)`;
+                    setTimeout(() => { showCard(); }, 100);
+                }
+                // (Optional wrap-around)
+                // else { currentIndex = cards.length - 1; rotationDegrees -= 180; flashcard.style.transform = `rotateY(${rotationDegrees}deg)`; setTimeout(showCard, 100); }
+            }
+        }
+        
         function handleKeyPress(e) {
-            if (e.code === 'Space' && cards.length > 0) {
+            if ((e.code === 'Space' || e.code === 'ArrowRight') && cards.length > 0) {
                 e.preventDefault();
-                handleCardClick();
+                handleCardClick(); // forward
+            } else if (e.key === 'ArrowLeft' && cards.length > 0) {
+                e.preventDefault();
+                showPrev();        // backward
             }
         }
 
         function showCelebration() {
+            nextBtn.style.display = 'none';
+            prevBtn.style.display = 'none';
             cardWrapper.classList.add('hidden');
             instruction.classList.add('hidden');
             celebration.classList.add('active');
