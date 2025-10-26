@@ -103,7 +103,6 @@
         .confetti { position: absolute; width: 10px; height: 10px; background: #f5576c; top: -10px; animation: confetti-fall 3s linear infinite; border-radius: 50%; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
         @keyframes confetti-fall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
-        .instruction { position: absolute; bottom: 100px; color: white; font-size: 16px; opacity: 0.8; }
         .hidden { display: none !important; }
 
         /* NEW: second button styling (left of Load Markdown) */
@@ -159,11 +158,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="instruction hidden" id="instruction">
-            Click card or press SPACEBAR to proceed</br>
-            <span>Or use arrow keys (← →) for navigation</span>
-        </div>
     </div>
 
     <div class="celebration" id="celebration">
@@ -215,7 +209,6 @@
         const definition = document.getElementById('definition');
         const progress = document.getElementById('progress');
         const celebration = document.getElementById('celebration');
-        const instruction = document.getElementById('instruction');
         const nextBtn = document.getElementById('nextBtn');
         const prevBtn = document.getElementById('prevBtn');
 
@@ -336,7 +329,6 @@
                 currentIndex = 0;
                 isFlipped = false;
                 cardWrapper.classList.remove('hidden');
-                instruction.classList.remove('hidden');
                 showCard();
             } else {
                 progress.textContent = 'No cards found in file.';
@@ -403,7 +395,6 @@
             nextBtn.style.display = 'none';
             prevBtn.style.display = 'none';
             cardWrapper.classList.add('hidden');
-            instruction.classList.add('hidden');
             celebration.classList.add('active');
             progress.textContent = 'Completed! 🎊';
             for (let i = 0; i < 50; i++) setTimeout(createConfetti, i * 50);
