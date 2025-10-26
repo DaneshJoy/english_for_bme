@@ -358,7 +358,7 @@
                 currentIndex++;
                 rotationDegrees += 180;
                 flashcard.style.transform = `rotateY(${rotationDegrees}deg)`;
-                setTimeout(() => { showCard(); }, 100);
+                setTimeout(() => { showCard(); }, 200);
             }
         }
 
@@ -377,7 +377,7 @@
                 // Go to the previous card (if any) and spin in reverse
                 rotationDegrees -= 180;
                 flashcard.style.transform = `rotateY(${rotationDegrees}deg)`;
-                setTimeout(() => { showCard(); }, 100);
+                setTimeout(() => { showCard(); }, 200);
             }
         }
         
