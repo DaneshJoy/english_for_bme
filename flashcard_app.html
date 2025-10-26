@@ -210,6 +210,8 @@
                         try {
                             const md = await fetchRawFile(f);
                             parseMarkdown(md);
+                            nextBtn.style.display = 'block';
+                            prevBtn.style.display = 'block';
                             closeModal();
                         } catch (err) {
                             unitStatus.innerHTML = `<div class="error">Failed to load file: ${escapeHtml(err.message || err)}</div>`;
@@ -265,8 +267,6 @@
                 parseMarkdown(content);
             };
             reader.readAsText(file);
-            nextBtn.style.display = 'block';
-            prevBtn.style.display = 'block';
         }
 
         function parseMarkdown(content) {
