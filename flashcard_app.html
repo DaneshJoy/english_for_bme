@@ -248,6 +248,8 @@
                         `https://raw.githubusercontent.com/${GITHUB.owner}/${GITHUB.repo}/${GITHUB.branch}/${item.path}`;
             const res = await fetch(url);
             if (!res.ok) throw new Error(`Fetch ${item.name} failed: ${res.status}`);
+            nextBtn.style.display = 'block';
+            prevBtn.style.display = 'block';
             return await res.text();
         }
 
