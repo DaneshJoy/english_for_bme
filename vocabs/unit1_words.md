@@ -1,22 +1,19 @@
-| **Word**          | **Form** | **Definition  / Synonym**                           |
-| ----------------- | -------- | --------------------------------------------------- |
-| electrocardiogram | n        | a  record of the heart’s electrical activity        |
-| electrode         | n        | a conductor  that transfers electric current        |
-| waveform          | n        | the  shape of an electrical signal                  |
-| amplitude         | n        | height of a  wave; signal strength                  |
-| frequency         | n        | number  of waves per second                         |
-| lead              | n        | electrode  arrangement for measuring heart activity |
-| cardiac           | adj      | related  to the heart                               |
-| depolarization    | n        | electrical  activation of heart muscle              |
-| repolarization    | n        | recovery  phase of cardiac muscle                   |
-| arrhythmia        | n        | irregular  heartbeat                                |
-| diagnostic        | adj      | used  to identify a disease                         |
-| artifact          | n        | unwanted  interference in a signal                  |
-| acquisition       | n        | process  of collecting data                         |
-| baseline          | n        | reference  level in a signal                        |
-| interpretation    | n        | explanation  of recorded data                       |
-| portable          | adj      | easy to  carry                                      |
-| monitoring        | n        | continuous  observation                             |
-| abnormality       | n        | irregular  or unusual condition                     |
-| correlation       | n        | connection  or relationship between things          |
-| therapeutic       | adj      | related to  treatment of disease                    |
+| **Word**       | **Form** | **Definition / Synonym**                    | **Persian Translation** |
+| -------------- | -------- | ------------------------------------------- | ----------------------- |
+| electrode      | n        | a conductor that transfers electric current | الکترود                 |
+| waveform       | n        | the shape of an electrical signal           | شکل موج                 |
+| amplitude      | n        | height of a wave; signal strength           | دامنه                   |
+| lead           | n        | electrode arrangement for measuring         | لید (آرایش الکترودی)    |
+| cardiac        | adj      | related to the heart                        | قلبی                    |
+| depolarization | n        | electrical activation of heart muscle       | دپولاریزاسیون           |
+| repolarization | n        | recovery phase of cardiac muscle            | رپولاریزاسیون           |
+| artifact       | n        | unwanted interference in a signal           | آرتیفکت / نویز          |
+| arrhythmia     | n        | irregular heartbeat                         | آریتمی                  |
+| abnormality    | n        | irregular or unusual condition              | ناهنجاری                |
+| diagnostic     | adj      | used to identify a disease                  | تشخیصی                  |
+| acquisition    | n        | process of collecting data                  | جمع‌آوری داده            |
+| interpretation | n        | explanation of recorded data                | تفسیر                   |
+| portable       | adj      | easy to carry                               | قابل حمل                |
+| monitoring     | n        | continuous observation                      | پایش / نظارت            |
+| correlation    | n        | connection or relationship between things   | همبستگی                 |
+| therapeutic    | adj      | related to treatment of disease             | درمانی                  |

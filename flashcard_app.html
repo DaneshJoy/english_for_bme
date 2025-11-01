@@ -362,6 +362,85 @@
             padding: 10px 12px;
             border-radius: 10px;
         }
+
+        .persian {
+            margin-top: .5rem;
+            font-size: 1.2em;
+            opacity: .9;
+        }
+
+        /* === Persian Toggle: fixed bottom-left === */
+        .fa-toggle-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 999;
+            user-select: none;
+            font-size: 16px;
+            color: white;
+            opacity: 0.9;
+        }
+
+        /* Switch wrapper */
+        .fa-switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 24px;
+        }
+
+        /* Hide native checkbox */
+        .fa-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* Slider background */
+        .fa-switch .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #777;
+            transition: .3s;
+            border-radius: 24px;
+        }
+
+        /* Toggle knob */
+        .fa-switch .slider::before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transition: .3s;
+        }
+
+        /* Checked state */
+        .fa-switch input:checked+.slider {
+            background: #4facfe;
+            /* matches your flashcard colors */
+        }
+
+        .fa-switch input:checked+.slider::before {
+            transform: translateX(22px);
+        }
+
+        /* Label */
+        .fa-label {
+            font-size: 15px;
+            color: #fff;
+            letter-spacing: 0.3px;
+        }
     </style>
 </head>
 
@@ -382,6 +461,7 @@
                 <div class="card-face card-back">
                     <!-- <div class="word-back" id="word-back"></div> -->
                     <div class="definition" id="definition"></div>
+                    <div class="persian" id="persian"></div> <!-- NEW -->
                 </div>
             </div>
         </div>
@@ -398,6 +478,15 @@
     <!-- Existing: Load Markdown -->
     <label for="fileInput" class="load-button">📁 Load Markdown</label>
     <input type="file" id="fileInput" accept=".md,.markdown">
+
+    <!-- Persian Toggle Switch -->
+    <div class="fa-toggle-container">
+        <label class="fa-switch">
+            <input type="checkbox" id="toggleFa" checked>
+            <span class="slider"></span>
+        </label>
+        <span class="fa-label">Persian Translation</span>
+    </div>
 
     <!-- NEW: Modal -->
     <div class="modal-backdrop" id="unitModal">
@@ -416,8 +505,8 @@
         const GITHUB = {
             owner: 'daneshjoy',
             repo: 'english_for_bme',
-            branch: 'main',
-            path: 'vocabs'
+            branch: 'main',              // e.g., 'main' or 'gh-pages'
+            path: 'vocabs'             // directory containing .md files
         };
         // ================================================
 
@@ -426,6 +515,7 @@
         let isFlipped = false;
         let isFinished = false;
         let rotationDegrees = 0;
+        let showPersian = true; // toggle state
 
         const fileInput = document.getElementById('fileInput');
         const flashcard = document.getElementById('flashcard');
@@ -434,10 +524,12 @@
         // const wordBack = document.getElementById('word-back');
         const form = document.getElementById('form');
         const definition = document.getElementById('definition');
+        const persian = document.getElementById('persian');        // NEW
         const progress = document.getElementById('progress');
         const celebration = document.getElementById('celebration');
         const nextBtn = document.getElementById('nextBtn');
         const prevBtn = document.getElementById('prevBtn');
+        const toggleFa = document.getElementById('toggleFa');      // NEW
 
         // Modal elements
         const selectUnitBtn = document.getElementById('selectUnitBtn');
@@ -463,6 +555,12 @@
             word.textContent = '';
             form.textContent = '';
             definition.textContent = '';
+            if (persian) {
+                persian.textContent = '';
+                persian.style.display = 'none';
+                persian.removeAttribute('dir');
+                persian.style.textAlign = '';
+            }
 
             flashcard.classList.remove('flipped', 'continue-rotation');
             flashcard.style.transform = 'rotateY(0deg)';
@@ -484,7 +582,12 @@
             // Clear file input so re-uploading the same file triggers 'change'
             fileInput.value = '';
 
-            // Scroll to top for a truly "fresh page" feel
+            // Keep user's Persian toggle as-is
+            if (toggleFa) {
+                toggleFa.checked = showPersian;
+            }
+
+            // Scroll to top
             window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
         }
 
@@ -492,13 +595,48 @@
             resetApp({ keepProgressMsg: true });
             progress.textContent = msg;
         }
-        // ==============================
 
+        // ===== NEW: Persian helpers =====
+        function containsRTL(text) {
+            // Arabic & Persian script ranges
+            return /[\u0590-\u05FF\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(text);
+        }
+
+        function renderPersianLine(text) {
+            if (!persian) return;
+            const clean = (text || '').trim();
+            persian.textContent = clean;
+            if (!clean) {
+                persian.style.display = 'none';
+                return;
+            }
+            // auto RTL
+            if (containsRTL(clean)) {
+                persian.dir = 'rtl';
+                persian.style.textAlign = 'right';
+            } else {
+                persian.dir = 'ltr';
+                persian.style.textAlign = 'left';
+            }
+            // show/hide based on toggle
+            persian.style.display = showPersian ? 'block' : 'none';
+        }
+
+        // ===== Event listeners =====
         fileInput.addEventListener('change', handleFileSelect);
         flashcard.addEventListener('click', handleCardClick);
         document.addEventListener('keydown', handleKeyPress);
         nextBtn.addEventListener('click', handleCardClick);
         prevBtn.addEventListener('click', showPrev);
+
+        if (toggleFa) {
+            toggleFa.addEventListener('change', () => {
+                showPersian = !!toggleFa.checked;
+                // re-apply on current card
+                const card = cards[currentIndex];
+                if (card) renderPersianLine(card.persian || '');
+            });
+        }
 
         // Open modal & load file list
         selectUnitBtn.addEventListener('click', async () => {
@@ -519,7 +657,6 @@
                     a.textContent = f.name;
                     a.addEventListener('click', async (e) => {
                         e.preventDefault();
-                        // FULL RESET whenever a unit is chosen
                         beginNewLoad(`Loading ${f.name}…`);
                         unitStatus.textContent = `Loading ${f.name}…`;
                         try {
@@ -553,12 +690,13 @@
             const url = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`;
             const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } });
             if (!res.ok) throw new Error(`GitHub API ${res.status} ${res.statusText}`);
-            const data = await res.json();
+            const data = await res.json(); // array of items
             return (Array.isArray(data) ? data : [])
                 .filter(item => item.type === 'file' && /\.(md|markdown)$/i.test(item.name));
         }
 
         async function fetchRawFile(item) {
+            // Prefer provided download_url; fallback to raw URL
             const url = item.download_url ||
                 `https://raw.githubusercontent.com/${GITHUB.owner}/${GITHUB.repo}/${GITHUB.branch}/${item.path}`;
             const res = await fetch(url);
@@ -568,11 +706,10 @@
 
         function escapeHtml(s) { return String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m])); }
 
-        // --- Existing logic (with reset on load) ---
+        // --- Existing logic (with 4th column support) ---
         function handleFileSelect(e) {
             const file = e.target.files[0];
             if (!file) return;
-            // FULL RESET whenever a file is selected
             beginNewLoad(`Loading ${file.name}…`);
             const reader = new FileReader();
             reader.onload = function (ev) {
@@ -587,13 +724,15 @@
             cards = [];
             for (let line of lines) {
                 line = line.trim();
-                if (line.startsWith('|') && !line.includes('---') && !line.includes('Word')) {
-                    const parts = line.split('|').map(p => p.trim()).filter(p => p);
+                if (line.startsWith('|') && !line.includes('---') && !/^\|\s*\*\*?Word/i.test(line)) {
+                    const parts = line.split('|').map(p => p.trim()).filter(p => p !== '');
+                    // parts: [Word, Form, Definition, Persian?]
                     if (parts.length >= 3) {
                         cards.push({
                             word: parts[0].replace(/\*\*/g, ''),
                             form: parts[1],
-                            definition: parts[2]
+                            definition: parts[2],
+                            persian: parts[3] || '' // NEW: optional
                         });
                     }
                 }
@@ -622,6 +761,10 @@
             form.textContent = card.form;
             // wordBack.textContent = card.word;
             definition.textContent = card.definition;
+
+            // NEW: Persian under the definition (auto RTL + toggle)
+            renderPersianLine(card.persian || '');
+
             progress.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
             flashcard.classList.remove('flipped', 'continue-rotation');
             flashcard.style.transform = `rotateY(${rotationDegrees}deg)`;
@@ -691,6 +834,7 @@
         // Initialize to a clean state on first load (optional)
         resetApp();
     </script>
+
 
 </body>
 
