@@ -5,4 +5,5 @@
 
 ## Units:
 
-- Unit 1: [Markdown](/Unit1.md) | [PDF](/PDFs/Unit1.pdf)
+- Unit 1: [Markdown](Markdown/Unit1.md) | [PDF](/PDF/Unit1.pdf)
+- Unit 2: [Markdown](Markdown/Unit2.md) | [PDF](/PDF/Unit2.pdf)

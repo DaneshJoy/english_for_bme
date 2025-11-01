@@ -1,28 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flashcard Study App</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh; display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .container { position: relative; width: 100%; height: 100vh; display: flex; justify-content: center; align-items: center; }
-        .card-wrapper { perspective: 1000px; width: 600px; height: 400px; margin: 20px;}
-        .flashcard { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s; cursor: pointer; }
-        .flashcard.flipped { transform: rotateY(180deg); }
-        .flashcard.continue-rotation { transform: rotateY(360deg); }
-        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); }
-        .card-front { background: white; }
-        .card-back { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); transform: rotateY(180deg); color: white; }
-        .word { font-size: 2.5rem; font-weight: bold; color: #667eea; margin-bottom: 10px; text-align: center; }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-wrapper {
+            perspective: 1000px;
+            width: 600px;
+            height: 400px;
+            margin: 20px;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard.continue-rotation {
+            transform: rotateY(360deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-front {
+            background: white;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: rotateY(180deg);
+            color: white;
+        }
+
+        .word {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
         /* .word-back { font-size: 2.5rem; font-weight: bold; color: #f8c4fc; margin-bottom: 10px; text-align: center; } */
-        .form { font-size: 18px; color: #999; font-style: italic; }
-        .definition { font-size: 28px; text-align: center; line-height: 1.6; }
+        .form {
+            font-size: 18px;
+            color: #999;
+            font-style: italic;
+        }
+
+        .definition {
+            font-size: 28px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
         .progress-container {
             position: fixed;
             top: 30px;
@@ -31,7 +107,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px; /* space between buttons and text */
+            gap: 12px;
+            /* space between buttons and text */
             z-index: 1000;
         }
 
@@ -46,7 +123,8 @@
             white-space: nowrap;
         }
 
-        .next-button, .prev-button {
+        .next-button,
+        .prev-button {
             width: 44px;
             height: 44px;
             border-radius: 50%;
@@ -57,14 +135,15 @@
             line-height: 44px;
             text-align: center;
             cursor: pointer;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
             transition: transform .2s, box-shadow .2s;
         }
 
         /* Hover effect */
-        .next-button:hover, .prev-button:hover {
+        .next-button:hover,
+        .prev-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
 
         /* Responsive adjustments */
@@ -79,7 +158,8 @@
                 padding: 8px 16px;
             }
 
-            .next-button, .prev-button {
+            .next-button,
+            .prev-button {
                 width: 40px;
                 height: 40px;
                 font-size: 20px;
@@ -88,62 +168,209 @@
         }
 
         /* .prev-button:hover, .next-button:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(0,0,0,0.4); } */
-        .prev-button:active, .next-button:active { transform: translateY(0); }
-        .load-button {
-            position: fixed; bottom: 30px; right: 30px; background: #7451ab; color: white; border: none;
-            padding: 15px 20px; border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); transition: transform 0.2s, box-shadow 0.2s;
+        .prev-button:active,
+        .next-button:active {
+            transform: translateY(0);
         }
-        .load-button:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); }
-        .load-button:active { transform: translateY(0); }
-        input[type="file"] { display: none; }
-        .celebration { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; justify-content: center; align-items: center; flex-direction: column; }
-        .celebration.active { display: flex; }
-        .celebration-text { font-size: 64px; color: white; font-weight: bold; margin-bottom: 20px; }
-        .confetti { position: absolute; width: 10px; height: 10px; background: #f5576c; top: -10px; animation: confetti-fall 3s linear infinite; border-radius: 50%; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-        @keyframes confetti-fall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
-        .hidden { display: none !important; }
+
+        .load-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #7451ab;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .load-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .load-button:active {
+            transform: translateY(0);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .celebration.active {
+            display: flex;
+        }
+
+        .celebration-text {
+            font-size: 64px;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f5576c;
+            top: -10px;
+            animation: confetti-fall 3s linear infinite;
+            border-radius: 50%;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
 
         /* NEW: second button styling (left of Load Markdown) */
         .select-button {
-            position: fixed; bottom: 30px; right: 230px;
-            background: #7257b2; color: white; border: none; padding: 15px 30px;
-            border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: transform .2s, box-shadow .2s;
+            position: fixed;
+            bottom: 30px;
+            right: 230px;
+            background: #7257b2;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform .2s, box-shadow .2s;
         }
-        .select-button:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+
+        .select-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
 
         /* NEW: modal for unit selection */
         .modal-backdrop {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.45);
-            display: none; align-items: center; justify-content: center; z-index: 1500;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1500;
         }
-        .modal-backdrop.active { display: flex; }
+
+        .modal-backdrop.active {
+            display: flex;
+        }
+
         .modal {
-            width: min(90vw, 560px); max-height: 70vh; overflow: auto;
-            background: #fff; border-radius: 18px; padding: 20px 22px; box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+            width: min(90vw, 560px);
+            max-height: 70vh;
+            overflow: auto;
+            background: #fff;
+            border-radius: 18px;
+            padding: 20px 22px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
         }
-        .modal header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-        .modal h3 { font-size: 20px; color: #4c51bf; }
+
+        .modal header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .modal h3 {
+            font-size: 20px;
+            color: #4c51bf;
+        }
+
         .modal button.close {
-            appearance: none; border: none; background: #eee; border-radius: 999px; width: 36px; height: 36px; font-size: 18px; cursor: pointer;
+            appearance: none;
+            border: none;
+            background: #eee;
+            border-radius: 999px;
+            width: 36px;
+            height: 36px;
+            font-size: 18px;
+            cursor: pointer;
         }
+
         .file-list a {
-            display: block; padding: 10px 12px; border-radius: 12px; text-decoration: none;
-            color: #333; background: #f7f7fb; margin: 6px 0; border: 1px solid #ececf5;
+            display: block;
+            padding: 10px 12px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #333;
+            background: #f7f7fb;
+            margin: 6px 0;
+            border: 1px solid #ececf5;
         }
-        .file-list a:hover { background: #eef2ff; border-color: #c7d2fe; }
-        .muted { color: #666; font-size: 14px; margin: 8px 0; }
-        .error { color: #c53030; background: #fff5f5; border: 1px solid #fed7d7; padding: 10px 12px; border-radius: 10px; }
+
+        .file-list a:hover {
+            background: #eef2ff;
+            border-color: #c7d2fe;
+        }
+
+        .muted {
+            color: #666;
+            font-size: 14px;
+            margin: 8px 0;
+        }
+
+        .error {
+            color: #c53030;
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            padding: 10px 12px;
+            border-radius: 10px;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="progress-container">
-        <button class="prev-button" id="prevBtn" title="Previous (←)" style="display: none;">←</button>
-        <div class="progress" id="progress">Load a file to start</div>
-        <button class="next-button" id="nextBtn" title="Next (→)" style="display: none;">→</button>
+            <button class="prev-button" id="prevBtn" title="Previous (←)" style="display: none;">←</button>
+            <div class="progress" id="progress">Load a file to start</div>
+            <button class="next-button" id="nextBtn" title="Next (→)" style="display: none;">→</button>
         </div>
 
         <div class="card-wrapper hidden" id="cardWrapper">
@@ -176,7 +403,7 @@
     <div class="modal-backdrop" id="unitModal">
         <div class="modal" role="dialog" aria-modal="true" aria-labelledby="unitTitle">
             <header>
-                <h3 id="unitTitle">Select a Unit (Markdown in <code>vocabs/</code>)</h3>
+                <h3 id="unitTitle">Select a Unit</h3>
                 <button class="close" id="closeModal" title="Close">×</button>
             </header>
             <div id="unitStatus" class="muted">Loading…</div>
@@ -188,9 +415,9 @@
         // ====== YOUR GITHUB REPO INFO (EDIT THESE) ======
         const GITHUB = {
             owner: 'daneshjoy',
-            repo:  'english_for_bme',
-            branch:'main',              // e.g., 'main' or 'gh-pages'
-            path:  'vocabs'             // directory containing .md files
+            repo: 'english_for_bme',
+            branch: 'main',
+            path: 'vocabs'
         };
         // ================================================
 
@@ -212,13 +439,60 @@
         const nextBtn = document.getElementById('nextBtn');
         const prevBtn = document.getElementById('prevBtn');
 
-
-        // NEW: Modal elements
+        // Modal elements
         const selectUnitBtn = document.getElementById('selectUnitBtn');
         const unitModal = document.getElementById('unitModal');
         const closeModalBtn = document.getElementById('closeModal');
         const unitList = document.getElementById('unitList');
         const unitStatus = document.getElementById('unitStatus');
+
+        // ===== NEW: Reset helpers =====
+        function clearConfetti() {
+            celebration.querySelectorAll('.confetti').forEach(n => n.remove());
+        }
+
+        function resetApp({ keepProgressMsg = false } = {}) {
+            // state
+            cards = [];
+            currentIndex = 0;
+            isFlipped = false;
+            isFinished = false;
+            rotationDegrees = 0;
+
+            // UI
+            word.textContent = '';
+            form.textContent = '';
+            definition.textContent = '';
+
+            flashcard.classList.remove('flipped', 'continue-rotation');
+            flashcard.style.transform = 'rotateY(0deg)';
+
+            cardWrapper.classList.add('hidden');
+
+            if (!keepProgressMsg) {
+                progress.textContent = 'Load a file to start';
+            }
+
+            // Hide nav until we actually have cards
+            nextBtn.style.display = 'none';
+            prevBtn.style.display = 'none';
+
+            // Celebration off + confetti gone
+            celebration.classList.remove('active');
+            clearConfetti();
+
+            // Clear file input so re-uploading the same file triggers 'change'
+            fileInput.value = '';
+
+            // Scroll to top for a truly "fresh page" feel
+            window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+        }
+
+        function beginNewLoad(msg = 'Loading…') {
+            resetApp({ keepProgressMsg: true });
+            progress.textContent = msg;
+        }
+        // ==============================
 
         fileInput.addEventListener('change', handleFileSelect);
         flashcard.addEventListener('click', handleCardClick);
@@ -226,8 +500,7 @@
         nextBtn.addEventListener('click', handleCardClick);
         prevBtn.addEventListener('click', showPrev);
 
-
-        // NEW: Open modal & load file list
+        // Open modal & load file list
         selectUnitBtn.addEventListener('click', async () => {
             unitList.innerHTML = '';
             unitStatus.textContent = 'Loading…';
@@ -246,15 +519,16 @@
                     a.textContent = f.name;
                     a.addEventListener('click', async (e) => {
                         e.preventDefault();
+                        // FULL RESET whenever a unit is chosen
+                        beginNewLoad(`Loading ${f.name}…`);
                         unitStatus.textContent = `Loading ${f.name}…`;
                         try {
                             const md = await fetchRawFile(f);
                             parseMarkdown(md);
-                            nextBtn.style.display = 'block';
-                            prevBtn.style.display = 'block';
                             closeModal();
                         } catch (err) {
                             unitStatus.innerHTML = `<div class="error">Failed to load file: ${escapeHtml(err.message || err)}</div>`;
+                            progress.textContent = 'Load a file to start';
                         }
                     });
                     frag.appendChild(a);
@@ -265,7 +539,7 @@
             }
         });
 
-        // NEW: Close modal
+        // Close modal
         closeModalBtn.addEventListener('click', closeModal);
         unitModal.addEventListener('click', (e) => { if (e.target === unitModal) closeModal(); });
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && unitModal.classList.contains('active')) closeModal(); });
@@ -279,34 +553,33 @@
             const url = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`;
             const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } });
             if (!res.ok) throw new Error(`GitHub API ${res.status} ${res.statusText}`);
-            const data = await res.json(); // array of items
+            const data = await res.json();
             return (Array.isArray(data) ? data : [])
                 .filter(item => item.type === 'file' && /\.(md|markdown)$/i.test(item.name));
         }
 
         async function fetchRawFile(item) {
-            // Prefer provided download_url; fallback to raw URL
             const url = item.download_url ||
-                        `https://raw.githubusercontent.com/${GITHUB.owner}/${GITHUB.repo}/${GITHUB.branch}/${item.path}`;
+                `https://raw.githubusercontent.com/${GITHUB.owner}/${GITHUB.repo}/${GITHUB.branch}/${item.path}`;
             const res = await fetch(url);
             if (!res.ok) throw new Error(`Fetch ${item.name} failed: ${res.status}`);
             return await res.text();
         }
 
-        function escapeHtml(s) { return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+        function escapeHtml(s) { return String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m])); }
 
-        // --- Existing logic ---
+        // --- Existing logic (with reset on load) ---
         function handleFileSelect(e) {
             const file = e.target.files[0];
             if (!file) return;
+            // FULL RESET whenever a file is selected
+            beginNewLoad(`Loading ${file.name}…`);
             const reader = new FileReader();
-            reader.onload = function(e) {
-                const content = e.target.result;
+            reader.onload = function (ev) {
+                const content = ev.target.result;
                 parseMarkdown(content);
             };
             reader.readAsText(file);
-            nextBtn.style.display = 'block';
-            prevBtn.style.display = 'block';
         }
 
         function parseMarkdown(content) {
@@ -328,10 +601,17 @@
             if (cards.length > 0) {
                 currentIndex = 0;
                 isFlipped = false;
+                isFinished = false;
+                rotationDegrees = 0;
                 cardWrapper.classList.remove('hidden');
                 showCard();
+                // show nav only once we have content
+                nextBtn.style.display = 'block';
+                prevBtn.style.display = 'block';
             } else {
                 progress.textContent = 'No cards found in file.';
+                nextBtn.style.display = 'none';
+                prevBtn.style.display = 'none';
             }
         }
 
@@ -349,7 +629,7 @@
         }
 
         function handleCardClick() {
-            if (isFinished) return;
+            if (isFinished || cards.length === 0) return;
             if (!isFlipped) {
                 rotationDegrees += 180;
                 flashcard.style.transform = `rotateY(${rotationDegrees}deg)`;
@@ -366,7 +646,6 @@
             if (cards.length === 0 || isFinished) return;
 
             if (!isFlipped) {
-                // If the back is showing, unflip to the front of the same card (reverse spin)
                 if (currentIndex > 0) {
                     currentIndex--;
                     rotationDegrees -= 180;
@@ -374,13 +653,12 @@
                     isFlipped = true;
                 }
             } else {
-                // Go to the previous card (if any) and spin in reverse
                 rotationDegrees -= 180;
                 flashcard.style.transform = `rotateY(${rotationDegrees}deg)`;
                 setTimeout(() => { showCard(); }, 200);
             }
         }
-        
+
         function handleKeyPress(e) {
             if ((e.code === 'Space' || e.code === 'ArrowRight') && cards.length > 0) {
                 e.preventDefault();
@@ -409,6 +687,11 @@
             celebration.appendChild(confetti);
             setTimeout(() => confetti.remove(), 3000);
         }
+
+        // Initialize to a clean state on first load (optional)
+        resetApp();
     </script>
+
 </body>
+
 </html>

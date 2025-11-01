@@ -89,31 +89,25 @@ In conclusion, ECG technology represents a vital link between **engineering** an
 
 #### B. Multiple Choice
 
-- 1. What does an electrocardiogram record?
-        - a) Heart electrical activity
-        - b) Blood flow speed
-        - c) Lung capacity
-        - d) Brain signals
-- 2. What do electrodes detect in ECG?
-        - a) Temperature
-        - b) Sound waves
-        - c) Voltage differences
-        - d) Magnetic fields
-- 3. Which wave represents ventricular repolarization?
-        - a) P wave
-        - b) QRS complex
-        - c) T wave
-        - d) None
-- 4. What is a common source of ECG artifacts?
-        - a) Poor electrode contact
-        - b) High heart rate
-        - c) Low oxygen
-        - d) None of the above
-- 5. What advantage do portable ECG devices provide?
-        - a) Continuous monitoring
-        - b) Reduced heart rate
-        - c) Higher temperature control
-        - d) Stronger electrical signals
+1. What does an electrocardiogram record?
+        a) Heart electrical activity	b) Blood flow speed
+        c) Lung capacity                        d) Brain signals
+  
+2. What do electrodes detect in ECG?
+        a) Temperature                         b) Sound waves
+        c) Voltage differences              d) Magnetic fields
+
+3. Which wave represents ventricular repolarization?
+        a) P wave           b) QRS complex
+        c) T wave           d) None
+  
+4. What is a common source of ECG artifacts?
+        a) Poor electrode contact        b) High heart rate
+        c) Low oxygen                            d) None of the above
+  
+5. What advantage do portable ECG devices provide?
+        a) Continuous monitoring              b) Reduced heart rate
+        c) Higher temperature control      d) Stronger electrical signals
 
 ---
 
