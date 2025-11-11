@@ -9,7 +9,7 @@
 | **Word**        | **Form** | **Definition / Synonym**                              | **Persian Translation** |
 | --------------- | -------- | ----------------------------------------------------- | ----------------------- |
 | microcontroller | n        | a compact integrated circuit that controls a device   | میکروکنترلر             |
-| embedded system | n        | a computer system within a larger device              | سیستم نهفته             |
+| embedded system | n        | a computer system within a larger device              | سیستم نهفته / تعبیه شده |
 | processor       | n        | the component that executes program instructions      | پردازنده                |
 | sensor          | n        | a device that detects or measures a physical property | حسگر                    |
 | actuator        | n        | a device that converts electrical signals into motion | عملگر                   |
@@ -18,9 +18,9 @@
 | automation      | n        | operation with minimal human control                  | خودکارسازی              |
 | feedback        | n        | information returned to control a process             | بازخورد                 |
 | prototype       | n        | an early model of a device                            | نمونه اولیه             |
-| integration     | n        | combining parts into a whole                          | یکپارچه‌سازی            |
+| integration     | n        | combining parts into a whole                          | یکپارچه‌سازی             |
 | reliability     | n        | ability to perform consistently and correctly         | قابلیت اطمینان          |
-| optimization    | n        | making something as effective as possible             | بهینه‌سازی              |
+| optimization    | n        | making something as effective as possible             | بهینه‌سازی               |
 
 ------
 
@@ -75,40 +75,28 @@ In conclusion, microcontrollers form the backbone of biomedical instrumentation.
 2. Microcontrollers can process both analog and digital signals.
 3. The first use of microcontrollers in medicine occurred in the 1980s.
 4. Feedback control helps maintain system stability.
-5. Only software engineers work with microcontrollers in medicine.
 6. Microcontrollers are used in ventilators and infusion pumps.
 7. IoMT refers to connecting medical devices through networks.
-8. All biomedical microcontrollers are powered by rechargeable batteries.
 
 ------
 
 #### B. Multiple Choice
 
 1. What is the main function of a microcontroller?
-        a) To store large amounts of data
-        b) To control and process signals in devices
-        c) To replace sensors in medical systems
-        d) To transmit electricity
+        a) To store large amounts of data                    b) To control and process signals in devices
+        c) To replace sensors in medical systems       d) To transmit electricity
 2. Which component converts electrical signals into motion?
-        a) Sensor
-        b) Actuator
-        c) Processor
-        d) Display
+        a) Sensor           b) Actuator
+        c) Processor      d) Display
 3. In an insulin pump, the microcontroller’s role is to:
-        a) Display data
-        b) Adjust insulin delivery automatically
-        c) Store patient records
-        d) Monitor air quality
+        a) Display data                    b) Adjust insulin delivery automatically
+        c) Store patient records      d) Monitor air quality
 4. Which of the following best describes an embedded system?
-        a) A computer used for general tasks
-        b) A device integrated into a larger machine for a specific function
-        c) A communication network
-        d) A type of biomedical sensor
+        a) A computer used for general tasks    b) A device integrated into a larger machine for a specific function
+        c) A communication network                  d) A type of biomedical sensor
 5. What does IoMT stand for?
-        a) Internet of Medical Tools
-        b) International Organization of Medical Technology
-        c) Internet of Medical Things
-        d) Integrated Operation of Microcontrollers and Tools
+        a) Internet of Medical Tools           b) International Organization of Medical Technology
+        c) Internet of Medical Things         d) Integrated Operation of Microcontrollers and Tools
 
 ------
 

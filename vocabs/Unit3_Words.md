@@ -1,7 +1,7 @@
 | **Word**        | **Form** | **Definition / Synonym**                              | **Persian Translation** |
 | --------------- | -------- | ----------------------------------------------------- | ----------------------- |
 | microcontroller | n        | a compact integrated circuit that controls a device   | میکروکنترلر             |
-| embedded system | n        | a computer system within a larger device              | سیستم نهفته             |
+| embedded system | n        | a computer system within a larger device              | سیستم نهفته / تعبیه شده |
 | processor       | n        | the component that executes program instructions      | پردازنده                |
 | sensor          | n        | a device that detects or measures a physical property | حسگر                    |
 | actuator        | n        | a device that converts electrical signals into motion | عملگر                   |
