@@ -7,3 +7,4 @@
 
 - Unit 1: [Markdown](units/Markdown/Unit1.md) | [PDF](units//PDF/Unit1.pdf) |  [HTML](units/HTML/Unit1.html)
 - Unit 2: [Markdown](units/Markdown/Unit2.md) | [PDF](units/PDF/Unit2.pdf) |  [HTML](units/HTML/Unit2.html)
+- Unit 3: [Markdown](units/Markdown/Unit3.md) | [PDF](units/PDF/Unit3.pdf) |  [HTML](units/HTML/Unit3.html)
