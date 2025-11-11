@@ -84,7 +84,7 @@ In conclusion, **electroencephalography** bridges the gap between engineering an
 
 ------
 
-#### C. Multiple Choice
+#### B. Multiple Choice
 
 1. What does EEG measure?
         a) Brain mechanical activity		b) Brain electrical activity

@@ -22,7 +22,16 @@
 |     خسته و بی رمق شدن | to tire out (to wear out)   |
 | مهم نیست / نگران نباش | never mind                  |
 
-
+## Lesson 3
+| Meaning | Idiom |
+| ------: | :---- |
+|         | to    |
+|         |       |
+|         |       |
+|         |       |
+|         |       |
+|         |       |
+|         |       |
 
 
 
