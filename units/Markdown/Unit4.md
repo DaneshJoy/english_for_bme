@@ -30,6 +30,10 @@
 3. What are some types of biomedical data used in ML models?
 4. Why is accuracy important in diagnostic algorithms?
 
+
+
+
+
 ------
 
 ### II. Reading
