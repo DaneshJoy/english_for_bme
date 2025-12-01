@@ -9,3 +9,4 @@
 - Unit 2: [Markdown](units/Markdown/Unit2.md) | [PDF](units/PDF/Unit2.pdf) |  [HTML](units/HTML/Unit2.html)
 - Unit 3: [Markdown](units/Markdown/Unit3.md) | [PDF](units/PDF/Unit3.pdf) |  [HTML](units/HTML/Unit3.html)
 - Unit 4: [Markdown](units/Markdown/Unit4.md) | [PDF](units/PDF/Unit4.pdf) |  [HTML](units/HTML/Unit4.html)
+- Unit 5: [Markdown](units/Markdown/Unit5.md) | [PDF](units/PDF/Unit5.pdf) |  [HTML](units/HTML/Unit5.html)
